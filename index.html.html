@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WILD CREATIVE — 지식 콘텐츠에 Color를 입히다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@300;400;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0c;
+    --paper: #f5f0e8;
+    --accent: #ff3c1e;
+    --electric: #00e5ff;
+    --gold: #e8c84a;
+    --mid: #1a1a20;
+    --dim: #2e2e38;
+    --muted: #6b6b7a;
+    --white: #ffffff;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-serif: 'Noto Serif KR', serif;
+    --font-mono: 'Roboto Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--white);
+    font-family: var(--font-serif);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,60,30,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9000;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    mix-blend-mode: normal;
+    transition: background 0.3s ease, padding 0.3s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(20px);
+    padding: 16px 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 48px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 9vw, 140px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+  .hero-title .outline {
+    -webkit-text-stroke: 1px var(--white);
+    color: transparent;
+  }
+  .hero-title .color {
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    margin-top: 40px;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 360px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 20px;
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 36px;
+    background: var(--accent);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover {
+    background: var(--white);
+    color: var(--ink);
+    gap: 20px;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 36px;
+    border: 1px solid var(--dim);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn-ghost:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1.2s ease 0.3s forwards;
+  }
+
+  .hero-img-stack {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-img-stack .img-main {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a0a20 0%, #0a0a0c 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Cinematic video grid */
+  .video-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+    opacity: 0.85;
+  }
+  .vg-cell {
+    overflow: hidden;
+    position: relative;
+  }
+  .vg-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.3) contrast(1.1);
+    transition: transform 0.8s ease, filter 0.4s ease;
+  }
+  .vg-cell:hover img {
+    transform: scale(1.06);
+    filter: grayscale(0) contrast(1.2);
+  }
+  .vg-cell-label {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    background: rgba(10,10,12,0.6);
+    padding: 4px 8px;
+  }
+
+  .hero-accent-line {
+    position: absolute;
+    bottom: 0;
+    left: 48px;
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--accent));
+    opacity: 0;
+    animation: fadeIn 1s ease 1.2s forwards;
+  }
+
+  /* scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    right: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.4s forwards;
+  }
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    animation: slideRight 1.5s ease infinite;
+  }
+
+  /* ── MARQUEE BAND ── */
+  .marquee-band {
+    padding: 20px 0;
+    background: var(--accent);
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 18s linear infinite;
+  }
+  .marquee-item {
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 0 48px;
+  }
+  .marquee-dot {
+    color: rgba(10,10,12,0.4);
+  }
+
+  /* ── WHAT WE DO ── */
+  #services {
+    padding: 140px 48px;
+    position: relative;
+  }
+  #services::before {
+    content: 'SERVICES';
+    position: absolute;
+    top: 100px; right: 48px;
+    font-family: var(--font-display);
+    font-size: 120px;
+    color: rgba(255,255,255,0.02);
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 80px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .service-card {
+    background: var(--mid);
+    padding: 52px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border-top: 2px solid transparent;
+  }
+  .service-card:hover {
+    background: var(--dim);
+    border-top-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 100%, rgba(255,60,30,0.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 40px;
+    display: block;
+  }
+
+  .service-icon {
+    font-size: 36px;
+    margin-bottom: 28px;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .service-card:hover .service-icon { transform: scale(1.15); }
+
+  .service-name {
+    font-family: var(--font-display);
+    font-size: 32px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  .service-desc {
+    font-family: var(--font-serif);
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--muted);
+  }
+
+  .service-arrow {
+    position: absolute;
+    bottom: 32px; right: 32px;
+    width: 40px; height: 40px;
+    border: 1px solid var(--dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.3s ease;
+    font-size: 18px;
+  }
+  .service-card:hover .service-arrow {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: rotate(-45deg);
+  }
+
+  /* ── WORKS SHOWCASE ── */
+  #works {
+    padding: 0 0 140px;
+    position: relative;
+  }
+
+  .works-header {
+    padding: 0 48px;
+    margin-bottom: 60px;
+  }
+
+  .works-masonry {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 320px 320px;
+    gap: 4px;
+    padding: 0 48px;
+  }
+
+  .work-item {
+    position: relative;
+    overflow: hidden;
+    background: var(--mid);
+  }
+  .work-item:first-child {
+    grid-row: span 2;
+  }
+
+  .work-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(0.4) brightness(0.7);
+    transition: transform 0.8s ease, filter 0.5s ease;
+  }
+  .work-item:hover .work-bg {
+    transform: scale(1.08);
+    filter: grayscale(0) brightness(0.6);
+  }
+
+  .work-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,12,0.9) 0%, transparent 60%);
+    z-index: 1;
+  }
+
+  .work-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 32px;
+    z-index: 2;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+  .work-item:hover .work-info {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Always visible title */
+  .work-title-always {
+    position: absolute;
+    bottom: 28px; left: 28px;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+  }
+  .work-item:hover .work-title-always { opacity: 0; }
+
+  .work-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .work-info-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .work-info-desc {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+
+  /* BG patterns for works */
+  .bg-chroma {
+    background: linear-gradient(135deg, #0d1f3c 0%, #1a3a5c 40%, #0a2040 100%);
+  }
+  .bg-edu {
+    background: linear-gradient(135deg, #1a0d2e 0%, #2d1457 40%, #1a0d2e 100%);
+  }
+  .bg-live {
+    background: linear-gradient(135deg, #1f0d0d 0%, #3d1010 50%, #200a0a 100%);
+  }
+  .bg-samsung {
+    background: linear-gradient(135deg, #0d1f1a 0%, #0a2e24 50%, #0d1f1a 100%);
+  }
+  .bg-content {
+    background: linear-gradient(135deg, #1f1a0d 0%, #3d300a 50%, #1f1a0d 100%);
+  }
+
+  .work-pattern {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 100px;
+    color: rgba(255,255,255,0.04);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── NUMBERS SECTION ── */
+  #numbers {
+    background: var(--paper);
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background-color: #ddd;
+  }
+  .number-cell {
+    background: var(--paper);
+    padding: 60px 48px;
+    text-align: center;
+  }
+  .number-val {
+    font-family: var(--font-display);
+    font-size: 80px;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .number-val span { color: var(--accent); }
+  .number-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: #666;
+    text-transform: uppercase;
+    margin-top: 16px;
+  }
+
+  /* ── CLIENTS ── */
+  #clients {
+    padding: 120px 48px;
+    text-align: center;
+    position: relative;
+  }
+
+  .clients-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 60px;
+  }
+
+  .clients-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .client-badge {
+    font-family: var(--font-display);
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: 1px solid var(--dim);
+    color: var(--muted);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+  .client-badge:hover {
+    border-color: var(--accent);
+    color: var(--white);
+    background: rgba(255,60,30,0.05);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    padding: 140px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    position: relative;
+  }
+  #contact::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--dim), transparent);
+  }
+
+  .contact-left .section-title {
+    margin-bottom: 32px;
+  }
+
+  .contact-desc {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 48px;
+    max-width: 480px;
+  }
+
+  .contact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .contact-list .icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    color: var(--accent);
+  }
+  .contact-list a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-list a:hover { color: var(--white); }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    position: relative;
+  }
+  .form-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    background: var(--mid);
+    border: 1px solid var(--dim);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    font-family: var(--font-serif);
+    font-size: 14px;
+    padding: 14px 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    resize: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+    background: rgba(255,60,30,0.03);
+  }
+  .form-group textarea { height: 120px; }
+
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 48px;
+    background: var(--accent);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .submit-btn:hover {
+    background: var(--white);
+    color: var(--ink);
+    gap: 24px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--mid);
+    border-top: 1px solid var(--dim);
+    padding: 60px 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 36px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-biz {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+    margin-top: 12px;
+  }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── KEYFRAMES ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes slideRight {
+    from { left: -100%; }
+    to   { left: 100%; }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── LIVE INDICATOR ── */
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.1s forwards;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease infinite;
+  }
+
+  /* ── HORIZONTAL RULE ── */
+  .hr-accent {
+    border: none;
+    border-top: 1px solid var(--dim);
+    margin: 0 48px;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { height: 50vh; }
+    .hero-left { padding: 100px 24px 60px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .works-masonry {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(5, 260px);
+    }
+    .work-item:first-child { grid-row: span 1; }
+    #numbers { grid-template-columns: 1fr 1fr; padding: 60px 24px; }
+    #contact { grid-template-columns: 1fr; padding: 80px 24px; }
+    #services { padding: 100px 24px; }
+    .works-header { padding: 0 24px; }
+    .works-masonry { padding: 0 24px; }
+    footer { flex-direction: column; gap: 40px; padding: 48px 24px; }
+    #clients { padding: 80px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">WILD<span>.</span>CREATIVE</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="live-badge">
+      <span class="live-dot"></span>
+      Creative Studio — Seoul, KR
+    </div>
+    <div class="hero-eyebrow">지식 콘텐츠의 새로운 기준</div>
+    <h1 class="hero-title">
+      WILD<br>
+      <span class="outline">CREA</span><br>
+      <span class="color">TIVE</span>
+    </h1>
+    <p class="hero-sub">
+      지식 콘텐츠에 <strong>Color</strong>를 입히다.<br>
+      라이브 방송, 이러닝, 라이브 커머스까지—<br>
+      콘텐츠의 경계를 허무는 크리에이티브 솔루션.
+    </p>
+    <div class="hero-cta">
+      <a href="#works" class="btn-primary">Works 보기 →</a>
+      <a href="#contact" class="btn-ghost">문의하기</a>
+    </div>
+    <div class="hero-accent-line"></div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-stack">
+      <div class="img-main">
+        <div class="video-grid">
+          <div class="vg-cell">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#0d1a30 0%,#1a3050 100%);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:var(--font-display);font-size:64px;color:rgba(255,255,255,0.12);letter-spacing:0.1em;">LIVE</span>
+            </div>
+            <div class="vg-cell-label">Live Broadcast</div>
+          </div>
+          <div class="vg-cell">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a0d28 0%,#2d1040 100%);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:var(--font-display);font-size:48px;color:rgba(255,255,255,0.1);letter-spacing:0.05em;">EDU</span>
+            </div>
+            <div class="vg-cell-label">E-Learning</div>
+          </div>
+          <div class="vg-cell">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#200a0a 0%,#3d1010 100%);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:var(--font-display);font-size:48px;color:var(--accent);opacity:0.12;letter-spacing:0.05em;">COM</span>
+            </div>
+            <div class="vg-cell-label">Live Commerce</div>
+          </div>
+          <div class="vg-cell">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#0d1f12 0%,#0a3020 100%);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:var(--font-display);font-size:40px;color:rgba(255,255,255,0.08);letter-spacing:0.05em;">STUDIO</span>
+            </div>
+            <div class="vg-cell-label">Chromakey Studio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" style="position:absolute;bottom:40px;right:48px;z-index:10;">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-band">
+  <div class="marquee-inner">
+    <span class="marquee-item">Live Broadcasting</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">E-Learning Solution</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Live Commerce</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Chromakey Studio</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Content Production</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">LMS Development</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="marquee-item">Live Broadcasting</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">E-Learning Solution</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Live Commerce</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Chromakey Studio</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Content Production</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">LMS Development</span>
+    <span class="marquee-item marquee-dot">◆</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">OUR<br>SERVICES</h2>
+    </div>
+    <p style="font-family:var(--font-serif);font-size:14px;font-weight:300;color:var(--muted);max-width:300px;line-height:1.9;text-align:right;">
+      콘텐츠의 힘을 극대화하는<br>최적의 맞춤 솔루션을 제공합니다.
+    </p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-num">01</span>
+      <span class="service-icon">📡</span>
+      <h3 class="service-name">라이브<br>방송</h3>
+      <p class="service-desc">
+        전문 장비와 노하우로 완성하는<br>
+        최적의 라이브 방송 맞춤 서비스.<br>
+        실시간 스트리밍부터 멀티캠 제작까지.
+      </p>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-num">02</span>
+      <span class="service-icon">🎓</span>
+      <h3 class="service-name">이러닝<br>솔루션</h3>
+      <p class="service-desc">
+        비대면 교육을 위한 완성형<br>
+        이러닝 콘텐츠 제작 솔루션.<br>
+        LMS 개발 및 운영관리 포함.
+      </p>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-num">03</span>
+      <span class="service-icon">🛍️</span>
+      <h3 class="service-name">라이브<br>커머스</h3>
+      <p class="service-desc">
+        효과적인 예산으로 최대 효과를 내는<br>
+        맞춤형 라이브 커머스 기획·제작.<br>
+        플랫폼 전략부터 실행까지.
+      </p>
+      <div class="service-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<hr class="hr-accent">
+
+<!-- WORKS -->
+<section id="works" style="padding-top:120px;">
+  <div class="works-header reveal">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title">FEATURED<br>WORKS</h2>
+  </div>
+
+  <div class="works-masonry" style="margin-top:48px;">
+    <!-- Large Feature -->
+    <div class="work-item reveal">
+      <div class="work-bg bg-chroma">
+        <div class="work-pattern">STUDIO</div>
+      </div>
+      <div class="work-overlay"></div>
+      <div class="work-title-always">크로마키<br>스튜디오</div>
+      <div class="work-info">
+        <div class="work-tag">Studio Production</div>
+        <div class="work-info-title">크로마키<br>스튜디오 촬영</div>
+        <div class="work-info-desc">전문 크로마키 스튜디오에서<br>완성하는 고품질 영상 콘텐츠</div>
+      </div>
+    </div>
+
+    <!-- Small 1 -->
+    <div class="work-item reveal reveal-delay-1">
+      <div class="work-bg bg-edu">
+        <div class="work-pattern" style="font-size:60px;">E-LEARN</div>
+      </div>
+      <div class="work-overlay"></div>
+      <div class="work-title-always" style="font-size:18px;">온라인<br>에듀케이션</div>
+      <div class="work-info">
+        <div class="work-tag">E-Learning</div>
+        <div class="work-info-title">온라인 에듀케이션</div>
+        <div class="work-info-desc">비대면 교육 특화 콘텐츠</div>
+      </div>
+    </div>
+
+    <!-- Small 2 -->
+    <div class="work-item reveal reveal-delay-2">
+      <div class="work-bg bg-samsung">
+        <div class="work-pattern" style="font-size:48px;">SAMSUNG</div>
+      </div>
+      <div class="work-overlay"></div>
+      <div class="work-title-always" style="font-size:18px;">삼성 SDS<br>크레듀</div>
+      <div class="work-info">
+        <div class="work-tag">Corporate Training</div>
+        <div class="work-info-title">삼성 SDS 크레듀</div>
+        <div class="work-info-desc">직원 연수 프로그램 제작</div>
+      </div>
+    </div>
+
+    <!-- Small 3 -->
+    <div class="work-item reveal reveal-delay-3">
+      <div class="work-bg bg-live">
+        <div class="work-pattern" style="font-size:48px;">LIVE</div>
+      </div>
+      <div class="work-overlay"></div>
+      <div class="work-title-always" style="font-size:18px;">라이브<br>방송 현장</div>
+      <div class="work-info">
+        <div class="work-tag">Live Production</div>
+        <div class="work-info-title">라이브 방송 현장</div>
+        <div class="work-info-desc">실시간 방송 현장 제작</div>
+      </div>
+    </div>
+
+    <!-- Small 4 -->
+    <div class="work-item reveal reveal-delay-4">
+      <div class="work-bg bg-content">
+        <div class="work-pattern" style="font-size:40px;">CONTENT</div>
+      </div>
+      <div class="work-overlay"></div>
+      <div class="work-title-always" style="font-size:18px;">대학<br>이러닝</div>
+      <div class="work-info">
+        <div class="work-tag">University Program</div>
+        <div class="work-info-title">대학 이러닝</div>
+        <div class="work-info-desc">원격 훈련 직무 교육</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section id="numbers">
+  <div class="number-cell reveal">
+    <div class="number-val">10<span>+</span></div>
+    <div class="number-label">Years of Experience</div>
+  </div>
+  <div class="number-cell reveal reveal-delay-1">
+    <div class="number-val">500<span>+</span></div>
+    <div class="number-label">Projects Completed</div>
+  </div>
+  <div class="number-cell reveal reveal-delay-2">
+    <div class="number-val">50<span>+</span></div>
+    <div class="number-label">Corporate Clients</div>
+  </div>
+  <div class="number-cell reveal reveal-delay-3">
+    <div class="number-val"><span>#</span>1</div>
+    <div class="number-label">Creative Partner</div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients">
+  <p class="clients-title">Trusted by Industry Leaders</p>
+  <div class="clients-grid reveal">
+    <div class="client-badge">삼성 SDS 크레듀</div>
+    <div class="client-badge">콘텐츠진흥원</div>
+    <div class="client-badge">대학 이러닝</div>
+    <div class="client-badge">원격훈련 기관</div>
+    <div class="client-badge">기업 연수원</div>
+    <div class="client-badge">라이브 커머스 파트너</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-left reveal">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title" style="font-size:clamp(40px,5vw,72px);">LET'S<br>WORK<br>TOGETHER</h2>
+    <p class="contact-desc">
+      프로젝트 문의, 파트너십 제안,<br>
+      서비스 관련 모든 문의를 환영합니다.<br>
+      함께 만들어갈 콘텐츠를 이야기해주세요.
+    </p>
+    <ul class="contact-list">
+      <li>
+        <span class="icon">📞</span>
+        <a href="tel:01020008643">010-2000-8643</a>
+      </li>
+      <li>
+        <span class="icon">✉</span>
+        <a href="mailto:wildcreative2@gmail.com">wildcreative2@gmail.com</a>
+      </li>
+      <li>
+        <span class="icon">📋</span>
+        <span>Business Lic. 229-56-00627</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="contact-form reveal reveal-delay-2">
+    <div class="form-group">
+      <label>이름 / Name</label>
+      <input type="text" placeholder="성함을 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label>이메일 / Email</label>
+      <input type="email" placeholder="이메일 주소를 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label>서비스 / Service</label>
+      <input type="text" placeholder="라이브 방송 / 이러닝 / 라이브 커머스">
+    </div>
+    <div class="form-group">
+      <label>메시지 / Message</label>
+      <textarea placeholder="프로젝트 내용을 간략히 소개해주세요"></textarea>
+    </div>
+    <button class="submit-btn" onclick="alert('문의가 접수되었습니다.\n빠른 시일 내에 연락드리겠습니다.')">
+      Send Message →
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <a href="#" class="footer-logo">WILD<span>.</span>CREATIVE</a>
+    <p class="footer-biz">
+      Business License 229-56-00627<br>
+      Tel. 010-2000-8643 · wildcreative2@gmail.com
+    </p>
+    <p class="footer-copy" style="margin-top:16px;">Copyright ⓒ 2026 WILD CREATIVE. All rights reserved.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:24px;">
+    <ul class="footer-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Works</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <ul class="footer-links">
+      <li><a href="#">이용약관</a></li>
+      <li><a href="#">개인정보처리방침</a></li>
+      <li><a href="https://www.youtube.com/channel/UCB1RqxQ1nL2MqhizAUQDlKQ/featured" target="_blank">YouTube</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // CUSTOM CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .service-card, .work-item, .client-badge').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // NAV SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // REVEAL ON SCROLL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // NUMBERS COUNT UP
+  function countUp(el, target, duration = 1600) {
+    let start = 0;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const val = Math.floor(progress * target);
+      el.querySelector('.num-count').textContent = val;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+</script>
+</body>
+</html>
