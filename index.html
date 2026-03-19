@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WILD CREATIVE — 지식 콘텐츠에 Color를 입히다</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@300;400;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #0a0a0c;
@@ -18,8 +18,8 @@
     --muted: #6b6b7a;
     --white: #ffffff;
     --font-display: 'Bebas Neue', sans-serif;
-    --font-serif: 'Noto Serif KR', serif;
-    --font-mono: 'Roboto Mono', monospace;
+    --font-serif: 'Noto Sans KR', sans-serif;
+    --font-mono: 'DM Mono', monospace;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,6 +30,7 @@
     background: var(--ink);
     color: var(--white);
     font-family: var(--font-serif);
+    font-weight: 500;
     overflow-x: hidden;
     cursor: none;
   }
@@ -175,7 +176,7 @@
     margin-top: 40px;
     font-family: var(--font-serif);
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 500;
     line-height: 1.8;
     color: var(--muted);
     max-width: 360px;
@@ -456,7 +457,7 @@
   .service-desc {
     font-family: var(--font-serif);
     font-size: 13px;
-    font-weight: 300;
+    font-weight: 500;
     line-height: 1.9;
     color: var(--muted);
   }
@@ -513,6 +514,14 @@
     background-size: cover;
     background-position: center;
     filter: grayscale(0.4) brightness(0.7);
+    transition: transform 0.8s ease, filter 0.5s ease;
+  }
+  .work-bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.8s ease, filter 0.5s ease;
   }
   .work-item:hover .work-bg {
@@ -701,7 +710,7 @@
   .contact-desc {
     font-family: var(--font-serif);
     font-size: 15px;
-    font-weight: 300;
+    font-weight: 500;
     line-height: 1.9;
     color: var(--muted);
     margin-bottom: 48px;
@@ -1111,71 +1120,66 @@
   <div class="works-masonry" style="margin-top:48px;">
     <!-- Large Feature -->
     <div class="work-item reveal">
-      <div class="work-bg bg-chroma">
-        <div class="work-pattern">STUDIO</div>
+      <div class="work-bg bg-chroma" id="work-img-1" style="background-image:url('works_1.png'); background-size:cover; background-position:center top; filter:brightness(0.65);">
       </div>
       <div class="work-overlay"></div>
-      <div class="work-title-always">크로마키<br>스튜디오</div>
+      <div class="work-title-always">라이브<br>방송 현장</div>
       <div class="work-info">
-        <div class="work-tag">Studio Production</div>
-        <div class="work-info-title">크로마키<br>스튜디오 촬영</div>
-        <div class="work-info-desc">전문 크로마키 스튜디오에서<br>완성하는 고품질 영상 콘텐츠</div>
+        <div class="work-tag">Live Production</div>
+        <div class="work-info-title">라이브<br>방송 현장</div>
+        <div class="work-info-desc">카메라·스위처·모니터링 시스템을<br>갖춘 전문 라이브 방송 제작 현장</div>
       </div>
     </div>
 
     <!-- Small 1 -->
     <div class="work-item reveal reveal-delay-1">
-      <div class="work-bg bg-edu">
-        <div class="work-pattern" style="font-size:60px;">E-LEARN</div>
+      <div class="work-bg bg-edu" id="work-img-2" style="background-image:url('works_2.png'); background-size:cover; background-position:left top; filter:brightness(0.65);">
       </div>
       <div class="work-overlay"></div>
-      <div class="work-title-always" style="font-size:18px;">온라인<br>에듀케이션</div>
+      <div class="work-title-always" style="font-size:18px;">크로마키<br>스튜디오</div>
       <div class="work-info">
-        <div class="work-tag">E-Learning</div>
-        <div class="work-info-title">온라인 에듀케이션</div>
-        <div class="work-info-desc">비대면 교육 특화 콘텐츠</div>
+        <div class="work-tag">Studio Production</div>
+        <div class="work-info-title">크로마키 스튜디오</div>
+        <div class="work-info-desc">블루·그린 스크린 전문 촬영</div>
       </div>
     </div>
 
     <!-- Small 2 -->
     <div class="work-item reveal reveal-delay-2">
-      <div class="work-bg bg-samsung">
-        <div class="work-pattern" style="font-size:48px;">SAMSUNG</div>
+      <div class="work-bg bg-samsung" id="work-img-3" style="background-image:url('works_2.png'); background-size:cover; background-position:right top; filter:brightness(0.65);">
       </div>
       <div class="work-overlay"></div>
-      <div class="work-title-always" style="font-size:18px;">삼성 SDS<br>크레듀</div>
+      <div class="work-title-always" style="font-size:18px;">콘퍼런스<br>중계</div>
       <div class="work-info">
-        <div class="work-tag">Corporate Training</div>
-        <div class="work-info-title">삼성 SDS 크레듀</div>
-        <div class="work-info-desc">직원 연수 프로그램 제작</div>
+        <div class="work-tag">Conference Live</div>
+        <div class="work-info-title">콘퍼런스 중계</div>
+        <div class="work-info-desc">행사·세미나 멀티캠 제작</div>
       </div>
     </div>
 
     <!-- Small 3 -->
     <div class="work-item reveal reveal-delay-3">
-      <div class="work-bg bg-live">
-        <div class="work-pattern" style="font-size:48px;">LIVE</div>
+      <div class="work-bg bg-live" id="work-img-4" style="background-image:url('works_1.png'); background-size:cover; background-position:center bottom; filter:brightness(0.65);">
       </div>
       <div class="work-overlay"></div>
-      <div class="work-title-always" style="font-size:18px;">라이브<br>방송 현장</div>
+      <div class="work-title-always" style="font-size:18px;">이러닝<br>콘텐츠</div>
       <div class="work-info">
-        <div class="work-tag">Live Production</div>
-        <div class="work-info-title">라이브 방송 현장</div>
-        <div class="work-info-desc">실시간 방송 현장 제작</div>
+        <div class="work-tag">E-Learning</div>
+        <div class="work-info-title">이러닝 콘텐츠</div>
+        <div class="work-info-desc">비대면 교육 영상 제작</div>
       </div>
     </div>
 
     <!-- Small 4 -->
     <div class="work-item reveal reveal-delay-4">
-      <div class="work-bg bg-content">
-        <div class="work-pattern" style="font-size:40px;">CONTENT</div>
+      <div class="work-bg bg-content" id="work-img-5" style="background-image:url('works_2.png'); background-size:cover; background-position:center bottom; filter:brightness(0.65);">
       </div>
       <div class="work-overlay"></div>
-      <div class="work-title-always" style="font-size:18px;">대학<br>이러닝</div>
+      <div class="work-title-always" style="font-size:18px;">라이브<br>커머스</div>
       <div class="work-info">
-        <div class="work-tag">University Program</div>
-        <div class="work-info-title">대학 이러닝</div>
-        <div class="work-info-desc">원격 훈련 직무 교육</div>
+        <div class="work-tag">Live Commerce</div>
+        <div class="work-info-title">라이브 커머스</div>
+        <div class="work-info-desc">맞춤형 커머스 기획·촬영</div>
       </div>
     </div>
   </div>
@@ -1231,7 +1235,7 @@
       </li>
       <li>
         <span class="icon">✉</span>
-        <a href="mailto:wildcreative2@gmail.com">wildcreative2@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#4f3826232b2c3d2a2e3b26392a7d0f28222e2623612c2022"><span class="__cf_email__" data-cfemail="f3849a9f9790819692879a8596c1b3949e929a9fdd909c9e">[email&#160;protected]</span></a>
       </li>
       <li>
         <span class="icon">📋</span>
@@ -1269,7 +1273,7 @@
     <a href="#" class="footer-logo">WILD<span>.</span>CREATIVE</a>
     <p class="footer-biz">
       Business License 229-56-00627<br>
-      Tel. 010-2000-8643 · wildcreative2@gmail.com
+      Tel. 010-2000-8643 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="691e00050d0a1b0c081d001f0c5b290e04080005470a0604">[email&#160;protected]</a>
     </p>
     <p class="footer-copy" style="margin-top:16px;">Copyright ⓒ 2026 WILD CREATIVE. All rights reserved.</p>
   </div>
@@ -1288,7 +1292,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // CUSTOM CURSOR
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
@@ -1345,16 +1349,4 @@
 
   // NUMBERS COUNT UP
   function countUp(el, target, duration = 1600) {
-    let start = 0;
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      const val = Math.floor(progress * target);
-      el.querySelector('.num-count').textContent = val;
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-</script>
-</body>
-</html>
+    let s
