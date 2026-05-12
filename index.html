@@ -258,12 +258,12 @@
       line-height: 1; letter-spacing: 0.02em;
       color: var(--white); margin-bottom: 24px;
     }
-    .ai-desc { font-size: 0.9rem; line-height: 1.9; color: var(--gray); margin-bottom: 40px; }
+    .ai-desc { font-size: 1rem; line-height: 1.9; color: #eeeeee; margin-bottom: 40px; }
     .ai-tags { display: flex; flex-wrap: wrap; gap: 8px; }
     .ai-tag {
       font-family: 'Roboto Mono', monospace;
-      font-size: 0.6rem; letter-spacing: 0.15em; padding: 6px 12px;
-      border: 1px solid #555555; color: #cccccc; text-transform: uppercase;
+      font-size: 0.78rem; letter-spacing: 0.12em; padding: 8px 16px;
+      border: 1px solid #555555; color: #eeeeee; text-transform: uppercase;
     }
     .ai-right {
       display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
@@ -280,7 +280,7 @@
       font-family: 'Bebas Neue', cursive;
       font-size: 1.6rem; letter-spacing: 0.05em; color: var(--white);
     }
-    .ai-card-desc { font-size: 0.72rem; color: #cccccc; line-height: 1.7; }
+    .ai-card-desc { font-size: 0.82rem; color: #cccccc; line-height: 1.7; }
     .ai-badge {
       font-family: 'Roboto Mono', monospace;
       font-size: 0.55rem; letter-spacing: 0.2em;
@@ -311,14 +311,14 @@
     .service-situation {
       font-family: 'Noto Serif KR', serif;
       font-size: 0.75rem; font-weight: 400;
-      line-height: 1.7; color: var(--gray);
+      line-height: 1.7; color: #bbbbbb;
       border-left: 1px solid var(--red); padding-left: 14px;
     }
     .service-name {
       font-family: 'Bebas Neue', cursive;
       font-size: 1.6rem; letter-spacing: 0.05em; color: var(--white);
     }
-    .service-desc { font-size: 0.82rem; line-height: 1.9; color: #cccccc; }
+    .service-desc { font-size: 0.82rem; line-height: 1.9; color: #dddddd; }
     .service-arrow {
       font-family: 'Roboto Mono', monospace;
       font-size: 0.65rem; letter-spacing: 0.2em; color: var(--red);
@@ -366,7 +366,7 @@
       font-size: 1.6rem; letter-spacing: 0.04em; color: var(--white);
       position: relative; z-index: 3;
     }
-    .work-desc { font-size: 0.7rem; color: #cccccc; margin-top: 6px; position: relative; z-index: 3; }
+    .work-desc { font-size: 0.82rem; color: #cccccc; margin-top: 6px; position: relative; z-index: 3; }
     .work-ai {
       background: var(--mid); border: 1px solid var(--border);
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
@@ -396,7 +396,7 @@
     /* GEO 최적화: 수치에 맥락 연결 */
     .number-context {
       font-family: 'Noto Serif KR', serif;
-      font-size: 0.78rem; line-height: 1.8; color: var(--gray); font-weight: 400;
+      font-size: 0.88rem; line-height: 1.8; color: #cccccc; font-weight: 400;
     }
     .number-label {
       font-family: 'Roboto Mono', monospace;
@@ -434,7 +434,7 @@
     }
     .client-name {
       font-family: 'Noto Serif KR', serif;
-      font-size: 0.62rem; color: var(--gray); text-align: center; line-height: 1.5;
+      font-size: 0.82rem; color: #cccccc; text-align: center; line-height: 1.6;
       font-weight: 400;
     }
 
@@ -448,24 +448,24 @@
     .faq-item:first-child { border-top: 1px solid var(--border); }
     .faq-q {
       font-family: 'Noto Serif KR', serif;
-      font-size: 1rem; font-weight: 500; color: var(--white);
+      font-size: 1.15rem; font-weight: 500; color: var(--white);
       margin-bottom: 16px;
       display: flex; gap: 16px; align-items: flex-start;
     }
     .faq-q::before {
       content: 'Q.';
       font-family: 'Roboto Mono', monospace;
-      font-size: 0.7rem; color: var(--red); margin-top: 3px; flex-shrink: 0;
+      font-size: 0.8rem; color: var(--red); margin-top: 3px; flex-shrink: 0;
     }
     .faq-a {
       font-family: 'Noto Serif KR', serif;
-      font-size: 0.88rem; line-height: 1.9; color: var(--gray);
+      font-size: 1rem; line-height: 1.9; color: #cccccc;
       display: flex; gap: 16px;
     }
     .faq-a::before {
       content: 'A.';
       font-family: 'Roboto Mono', monospace;
-      font-size: 0.7rem; color: var(--gray); margin-top: 3px; flex-shrink: 0;
+      font-size: 0.8rem; color: #cccccc; margin-top: 3px; flex-shrink: 0;
     }
 
     /* CONTACT */
@@ -497,9 +497,10 @@
     }
     .form-input, .form-textarea {
       background: var(--mid); border: 1px solid var(--border); color: var(--white);
-      font-family: 'Noto Serif KR', serif; font-size: 0.85rem;
+      font-family: 'Noto Serif KR', serif; font-size: 0.95rem;
       padding: 14px 18px; outline: none; transition: border-color 0.2s;
     }
+    .form-input::placeholder, .form-textarea::placeholder { color: #aaaaaa; }
     .form-input:focus, .form-textarea:focus { border-color: var(--red); }
     .form-textarea { resize: vertical; min-height: 140px; }
     .form-btn {
@@ -553,7 +554,7 @@
     }
     .footer-legal a, .footer-legal button {
       font-family: 'Roboto Mono', monospace;
-      font-size: 0.58rem; letter-spacing: 0.15em; color: var(--gray);
+      font-size: 0.72rem; letter-spacing: 0.15em; color: #bbbbbb;
       text-decoration: none; background: none; border: none;
       cursor: pointer; padding: 0; transition: color 0.2s;
     }
@@ -561,7 +562,7 @@
     .footer-bottom {
       border-top: 1px solid var(--border); padding-top: 24px;
       font-family: 'Roboto Mono', monospace;
-      font-size: 0.55rem; letter-spacing: 0.15em; color: #333;
+      font-size: 0.6rem; letter-spacing: 0.15em; color: #888888;
     }
 
     /* MODAL */
@@ -919,7 +920,7 @@
       <div class="work-card work-ai reveal">
         <div class="work-ai-icon">🤖</div>
         <span class="work-ai-label">AI PORTFOLIO</span>
-        <p class="work-desc" style="color: var(--gray); text-align: center; font-size: 0.72rem;">짱돌 AI 캐릭터 · AI 휴먼 인플루언서<br>제작 진행 중 — 공개 예정</p>
+        <p class="work-desc" style="color: #cccccc; text-align: center; font-size: 0.82rem;">짱돌 AI 캐릭터 · AI 휴먼 인플루언서<br>제작 진행 중 — 공개 예정</p>
       </div>
     </div>
   </section>
@@ -945,7 +946,7 @@
       <div class="number-item reveal">
         <div class="number-value" style="font-size: 3rem;">100<span>%</span></div>
         <span class="number-label">Creative Commitment</span>
-        <p class="number-context">1997년 창업 이후 모든 프로젝트에 창의적 완성도를 최우선 원칙으로 지켜왔습니다.</p>
+        <p class="number-context">2021년 창업 이후 모든 프로젝트에 창의적 완성도를 최우선 원칙으로 지켜왔습니다.</p>
       </div>
     </div>
   </section>
@@ -992,7 +993,6 @@
   <!-- FAQ (신규: AI 인용 최적화 포맷) -->
   <section id="faq">
     <div class="faq-header reveal">
-      <span class="section-tag">자주 묻는 질문</span>
       <h2 class="section-title">FAQ</h2>
     </div>
     <div class="faq-list">
@@ -1021,7 +1021,7 @@
       <div class="contact-left reveal">
         <span class="contact-label">Get In Touch</span>
         <h2 class="contact-title">LET'S<br>WORK<br>TOGETHER</h2>
-        <p style="font-family:'Noto Serif KR',serif; font-size:0.82rem; color:#cccccc; line-height:1.9; margin-bottom:32px;">
+        <p style="font-family:'Noto Serif KR',serif; font-size:0.95rem; color:#dddddd; line-height:1.9; margin-bottom:32px;">
           프로젝트 문의, 파트너십 제안,<br>
           서비스 관련 모든 문의를 환영합니다.<br>
           함께 만들어갈 콘텐츠를 이야기해주세요.
